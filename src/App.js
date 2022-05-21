@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import Form from './components/Form'
+import Display from './components/Display'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Header from "./components/Header";
+
+
 
 function App() {
+  const [loading, setLoading] = useState(false)
+  const [exercises, setExercises] = useState([]);
+  useEffect(() => {
+    setLoading(true)
+    const fetchExercises = async() => {
+      const res = await axios.get('http://localhost:3001/api/exercise')
+      setExercises(res.data)
+      setLoading(false)
+    }
+    fetchExercises()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <>
+      <Header />
+    <div className='main-container'>
+    <section className='container1'>
+      <Form  />
+    </section>
+    <section className='container2'>
+      <Display exercises={exercises} loading={loading}/>
+    </section>
     </div>
+    </>
   );
 }
 
