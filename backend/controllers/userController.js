@@ -54,7 +54,22 @@ const deleteUser = async(req, res) => {
     }
 }
 
+const loginUser = async(req, res) => {
+    try {
+        const { username } = req.body
+        console.log(`the username is: ${username}`);
+        const loggedIn = await User.findOne({username})
+        if(!loggedIn) {
+            res.status(404).json({message: error})
+        }
+        console.log(loggedIn);
+        res.status(200).json(loggedIn)
+    } catch (error) {
+        res.status(404).json({message: error})
+    }
+   
 
+}
 
 
 module.exports = {
@@ -62,5 +77,6 @@ module.exports = {
     getOneUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    loginUser
 }

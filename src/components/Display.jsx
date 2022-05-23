@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import UpdateForm from './UpdateForm';
+import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,6 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import axios from 'axios';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -33,45 +35,63 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   function createData(description, date, duration) {
     return { description, date, duration};
   }
-function Display({ exercises, loading }) {
-    useEffect(() => {
-        
-    }, [])
-    if(loading) {
-        return (
-            <div>
-                loading...
-            </div>
-        )
-    }
-  return (
-    <TableContainer style={{width: '800px'}} component={Paper}>
-    <Table sx={{ minWidth: 700 }} stickyHeader aria-label="sticky table">
-      <TableHead>
-        <TableRow>
-          <StyledTableCell>exercise date</StyledTableCell>
-          <StyledTableCell align="right">exercise description</StyledTableCell>
-          <StyledTableCell align="right">duration(min)</StyledTableCell>
-          <StyledTableCell align="right">edit exercise</StyledTableCell>
-          <StyledTableCell align="right">delete exercise</StyledTableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {exercises.map((exercise) => (
-          <StyledTableRow key={exercise._id}>
-            <StyledTableCell component="th" scope="row">
-              {new Date(exercise.date).toLocaleDateString()}
-            </StyledTableCell>
-            <StyledTableCell align="right">{exercise.description}</StyledTableCell>
-            <StyledTableCell align="right">{exercise.duration}</StyledTableCell>
-            <StyledTableCell align="right"><button>edit</button></StyledTableCell>
-            <StyledTableCell align="right"><button>delete</button></StyledTableCell>
-          </StyledTableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
-  )
+function Display({ exercises, loading, deleteExercise, onSubmit, exerciseUpdate}) {
+const [isUpdating, setIsUpdating] = useState('id');
+useEffect(() => {
+
+}, [])
+if(loading) {
+    return (
+        <div>
+            loading...
+        </div>
+    )
+}
+const handleUpdate = (id) => {
+   setIsUpdating(id)
+}
+const renderUpdateForm = (id, newData) => {
+    return (
+        <div>
+      <UpdateForm loading={loading} exerciseUpdate={()=>exerciseUpdate(id, newData)} onSubmit={onSubmit}/>
+      </div>
+      )
+      console.log(newData);
+  }
+return (
+<TableContainer style={{width: '800px'}} component={Paper}>
+<Table sx={{ minWidth: 700 }} stickyHeader aria-label="sticky table">
+    <TableHead>
+    <TableRow>
+        <StyledTableCell>exercise date</StyledTableCell>
+        <StyledTableCell align="right">exercise description</StyledTableCell>
+        <StyledTableCell align="right">duration(min)</StyledTableCell>
+        <StyledTableCell align="right">edit exercise</StyledTableCell>
+        <StyledTableCell align="right">delete exercise</StyledTableCell>
+    </TableRow>
+    </TableHead>
+    <TableBody>
+    {exercises.map((exercise) => (
+        <StyledTableRow key={exercise._id}>
+        {isUpdating === exercise._id ? 
+            renderUpdateForm(exercise._id)
+            :
+            <>
+        <StyledTableCell component="th" scope="row">
+            {new Date(exercise.date).toLocaleDateString()}
+        </StyledTableCell>
+        <StyledTableCell align="right">{exercise.description}</StyledTableCell>
+        <StyledTableCell align="right">{exercise.duration}</StyledTableCell>
+        <StyledTableCell align="right"><button onClick={()=> handleUpdate(exercise._id)}>edit</button></StyledTableCell>
+        <StyledTableCell align="right"><button onClick={() => deleteExercise(exercise._id)}>delete</button></StyledTableCell>
+        </>
+        }
+        </StyledTableRow>
+    ))}
+    </TableBody>
+</Table>
+</TableContainer>
+)
 }
 
 export default Display

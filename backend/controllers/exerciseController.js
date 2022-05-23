@@ -44,6 +44,7 @@ const updateExercise = async(req, res) => {
             {new: true, runValidators: true}
         )
         res.status(200).json(updatedExercise)
+        console.log(`upadated package is: ${updatedExercise}`);
     } catch (error) {
         res.status(404).json({message: error})
     }

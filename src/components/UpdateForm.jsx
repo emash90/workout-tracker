@@ -4,27 +4,22 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 
-const Form = ({ onSubmit }) => {
-//const [listExercises, setListExercises] = useState([])
-const [loading, setLoading] = useState(false)
-const [startDate, setStartDate] = useState(new Date());
+const UpdateForm = ({ loading, exerciseUpdate }) => {
 const { control, register, handleSubmit, reset } = useForm();
-const [data, setData] = useState("");
-
-
+const [newData, setNewData] = useState("");
 if(loading) {
     return (
         <div>
-            loading...
+        loading...
         </div>
     )
 }
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("description")} onChange={handleSubmit} placeholder="enter exercise description" name="description" />
+return (
+    <div className='update-form'>
+      <form onSubmit={(e) => handleSubmit(exerciseUpdate(setNewData))}>
+      <input {...register("description")} onChange={handleSubmit} placeholder="new exercise description" name="description" />
       <select {...register("duration")} onChange={handleSubmit} name='duration'>
-        <option value="">Duration...</option>
+        <option value="">duration...</option>
         <option value="0-10mins">0 - 10 mins: Good Start</option>
         <option value="10-20mins">10 - 20 mins: Way to go</option>
         <option value="20-30mins">20 - 30 mins: Keep pushing</option>
@@ -38,16 +33,17 @@ if(loading) {
       name={'date'} 
       render={({ field }) => (
         <DatePicker
-          placeholderText='Select date'
+          placeholderText='Select new date'
           onChange={(date) => field.onChange(new Date(date))}
           selected={field.value}
         />
      )}
     />
-      <p>{data}</p>
+      <p>{setNewData}</p>
       <input type="submit" />
-    </form>
+    </form> 
+    </div>
   )
 }
 
-export default Form
+export default UpdateForm

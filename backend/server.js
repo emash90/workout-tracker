@@ -4,12 +4,14 @@ const app = express()
 require('dotenv').config()
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
 
 
 
 
 app.use(cors())
+app.use(morgan('dev'))
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended: false})) 
 
