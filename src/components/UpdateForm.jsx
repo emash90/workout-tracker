@@ -40,7 +40,7 @@ return (
      )}
     />
       <p>{setNewData}</p>
-      <input type="submit" />
+      <input type="submit" value={'Update'} />
     </form> 
     </div>
   )

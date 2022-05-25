@@ -1,15 +1,18 @@
 const User = require('../models/userModel')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
+const asyncHandler = require('express-async-handler')
 
-const getAllUsers = async(req, res) => {
+
+const getAllUsers = asyncHandler(async(req, res) => {
     try {
         const allUsers = await User.find()
         res.status(200).json(allUsers)
     } catch (error) {
         res.status(401).json(error)
     }
-}
-const getOneUser = async(req, res) => {
+})
+const getOneUser = asyncHandler(async(req, res) => {
     try {
         const userId = req.params.id
         const oneUser = await User.findById(userId)
@@ -19,19 +22,23 @@ const getOneUser = async(req, res) => {
     } catch (error) {
         res.status(404).json({message: error})
     }
-}
-const createUser = async(req, res) => {
+})
+const createUser = asyncHandler(async(req, res) => {
     try {
         const newUser = new User({
             username: req.body.username
         })
         await newUser.save()
-        res.status(201).json(newUser)
+        res.status(201).json({
+            token: generateToken(newUser._id),
+            username: newUser.username,
+            id: newUser._id
+        })
     } catch (error) {
         res.status(404).json({message: error})
     }
-}
-const updateUser = async(req, res) => {
+})
+const updateUser = asyncHandler(async(req, res) => {
     try {
         const userId = req.params.id
         const updatedUser = await User.findByIdAndUpdate(
@@ -43,8 +50,8 @@ const updateUser = async(req, res) => {
     } catch (error) {
         res.status(404).json({message: error})
     }
-}
-const deleteUser = async(req, res) => {
+})
+const deleteUser = asyncHandler(async(req, res) => {
     try {
         const userId = req.params.id
         const userToDelete = await User.findByIdAndDelete(userId)
@@ -52,25 +59,33 @@ const deleteUser = async(req, res) => {
     } catch (error) {
         res.status(404).json({message: error})
     }
-}
+})
 
-const loginUser = async(req, res) => {
+const loginUser = asyncHandler(async(req, res) => {
     try {
         const { username } = req.body
         console.log(`the username is: ${username}`);
-        const loggedIn = await User.findOne({username})
-        if(!loggedIn) {
+        const currentUser = await User.findOne({username})
+        if(!currentUser) {
             res.status(404).json({message: error})
         }
-        console.log(loggedIn);
-        res.status(200).json(loggedIn)
+        res.status(200).json({
+            _id: currentUser.id,
+            username: currentUser.username,
+            token: generateToken(currentUser._id)
+        })
+        console.log(`this is the currentUser username: ${currentUser.username}`);
     } catch (error) {
         res.status(404).json({message: error})
     }
    
 
+})
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d',
+    } )
 }
-
 
 module.exports = {
     getAllUsers,

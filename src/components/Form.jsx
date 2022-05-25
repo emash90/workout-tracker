@@ -19,10 +19,11 @@ if(loading) {
         </div>
     )
 }
-
+const currentUser = JSON.parse(localStorage.getItem('currentUser'))
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input {...register("description")} onChange={handleSubmit} placeholder="enter exercise description" name="description" />
+      <input {...register("username")} onChange={handleSubmit} name="username" value={currentUser.username} disabled />
       <select {...register("duration")} onChange={handleSubmit} name='duration'>
         <option value="">Duration...</option>
         <option value="0-10mins">0 - 10 mins: Good Start</option>

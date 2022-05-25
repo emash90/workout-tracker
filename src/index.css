@@ -4,6 +4,8 @@
   box-sizing: border-box;
 }
 .heading {
+  display: flex;
+  justify-content: space-between;
   font-size: 38px;
   text-align: center;
   padding-top: 2rem;

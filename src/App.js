@@ -17,10 +17,17 @@ const { control, register, handleSubmit, reset } = useForm();
   const [exercises, setExercises] = useState([]);
   const [listExercises, setListExercises] = useState([])
 
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
+  const token = currentUser.token
+  console.log(`token is: ${token}`);
+
   useEffect(() => {
     setLoading(true)
     const fetchExercises = async() => {
-      const res = await axios.get('http://localhost:3001/api/exercise')
+      const res = await axios.get('http://localhost:3001/api/exercise',
+      {headers: {Authorization: `Bearer ${token}`}}
+      )
       setExercises(res.data)
       setLoading(false)
     }
@@ -30,7 +37,7 @@ const { control, register, handleSubmit, reset } = useForm();
     try {
         setLoading(true)
         const res = await axios.post('http://localhost:3001/api/exercise', data,
-        { headers: { 'Content-Type': 'application/json' }}
+        {headers: {Authorization: `Bearer ${token}`}}
         )
         setListExercises(prev => [...prev, res.data])
         setLoading(false)
