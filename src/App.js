@@ -49,8 +49,9 @@ const exerciseUpdate = async(id, setNewData) => {
   try {
     console.log(setNewData);
     setLoading(true)
-    const res = await axios.patch(`http://localhost:3001/api/exercise/${id}`, setNewData,
-    { headers: { 'Content-Type': 'application/json' }}
+    const res = await axios.patch(`http://localhost:3001/api/exercise/${id}`,
+    setNewData,
+    {headers: {Authorization: `Bearer ${token}`}}
     )
     setListExercises(prev => [...prev, res.data])
         setLoading(false)
@@ -60,7 +61,9 @@ const exerciseUpdate = async(id, setNewData) => {
 }
   const deleteExercise = async(id) => {
     try {
-        const res = await axios.delete(`http://localhost:3001/api/exercise/${id}`)
+        const res = await axios.delete(`http://localhost:3001/api/exercise/${id}`,
+        {headers: {Authorization: `Bearer ${token}`}}
+        )
         const newListExercises = listExercises.filter(exercise => exercise._id !== id)
         setListExercises(newListExercises)
     } catch (error) {
