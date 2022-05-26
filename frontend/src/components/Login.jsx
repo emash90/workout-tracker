@@ -35,7 +35,7 @@ useEffect(() => {
     if(data) {
         navigate('/home')
     } else {
-    navigate('/login')
+    navigate('/')
 }
 }, [data])
 

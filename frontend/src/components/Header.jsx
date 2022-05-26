@@ -5,8 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 const Header = () => {
     const navigate = useNavigate()
     const handleExit = () => {
-        localStorage.removeItem('user')
-        navigate('/login')
+        localStorage.removeItem('currentUser')
+        navigate('/')
     }
   return (
     <div className='heading'>

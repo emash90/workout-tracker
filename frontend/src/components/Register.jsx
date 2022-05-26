@@ -46,7 +46,7 @@ const Register = () => {
             <input {...register("username")} placeholder="username" name='username' onChange={handleSubmit} />
             <input type="submit" value={'register'}/>
         </form>
-        <p>Already registered? <a href="/login">login</a> </p>
+        <p>Already registered? <a href="/">login</a> </p>
     </div>
   )
 }
